@@ -8,9 +8,15 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
       },
+      name: {
+        type: Sequelize.STRING(50),
+        allowNull: false,
+        unique: true,
+      },
       userName: {
         type: Sequelize.STRING(50),
         allowNull: false,
+        unique: true,
       },
       password: {
         type: Sequelize.STRING,

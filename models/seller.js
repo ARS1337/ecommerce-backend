@@ -1,5 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
+const bcrypt = require('bcrypt');
 module.exports = (sequelize, DataTypes) => {
   class Seller extends Model {
     /**
@@ -21,9 +22,15 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
+      name: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        unique: true,
+      },
       userName: {
         type: DataTypes.STRING(50),
         allowNull: false,
+        unique: true,
       },
       password: {
         type: DataTypes.STRING,
@@ -33,6 +40,13 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'Seller',
+      hooks: {
+        beforeSave: async (seller) => {
+          if (seller.changed('password')) {
+            seller.password = await bcrypt.hash(seller.password, 8);
+          }
+        },
+      },
     }
   );
   return Seller;
