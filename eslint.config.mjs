@@ -31,5 +31,5 @@ export default defineConfig(
       },
     },
   ],
-  globalIgnores(['eslint.config.mjs'])
+  globalIgnores(['eslint.config.mjs', 'migrations/*'])
 );
