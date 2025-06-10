@@ -1,6 +1,14 @@
 const express = require('express');
 const { Sequelize } = require('sequelize');
 
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+
+const categoryRoutes = require('./routes/category');
+const productRoutes = require('./routes/product');
+const sellerRoutes = require('./routes/seller');
+const customerRoutes = require('./routes/customer');
+
 const DATABASE_URL = process.env.DATABASE_URL;
 
 const sequelize = new Sequelize(DATABASE_URL, {
@@ -19,9 +27,18 @@ const app = express();
 
 const PORT = process.env.PORT;
 
+app.use(bodyParser.json());
+
+app.use(cookieParser());
+
 app.get('/', (req, res) => {
   return res.status(200).json({ hello: 'world' });
 });
+
+app.use('/category', categoryRoutes);
+app.use('/product', productRoutes);
+app.use('/seller', sellerRoutes);
+app.use('/customer', customerRoutes);
 
 app.listen(PORT, () => {
   console.log(`server started on port ${PORT}`);

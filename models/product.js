@@ -49,11 +49,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       discountedPrice: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
       },
       rating: {
         type: DataTypes.INTEGER,
-        allowNull: false,
       },
       tags: {
         type: DataTypes.ARRAY(DataTypes.STRING),

@@ -21,6 +21,23 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
+      name: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+      },
+      userName: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        unique: true,
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      role: {
+        type: DataTypes.ENUM('CUSTOMER', 'ADMIN'),
+        defaultValue: 'CUSTOMER',
+      },
       details: {
         type: DataTypes.JSON, // Using the JSON type for details
         allowNull: true,

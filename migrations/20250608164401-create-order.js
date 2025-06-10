@@ -18,8 +18,14 @@ module.exports = {
         onDelete: 'CASCADE', // If a Customer is deleted, their orders will be deleted as well
       },
       orderStatus: {
-        type: Sequelize.ENUM('Added To Cart', 'Ordered'),
+        type: Sequelize.ENUM(
+          'Added To Cart',
+          'Ordered',
+          'Shipped',
+          'Delivered'
+        ),
         allowNull: false,
+        defaultValue: 'Added To Cart',
       },
       createdAt: {
         allowNull: false,

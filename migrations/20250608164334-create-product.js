@@ -28,11 +28,9 @@ module.exports = {
       },
       discountedPrice: {
         type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
       },
       rating: {
         type: Sequelize.INTEGER,
-        allowNull: false,
       },
       tags: {
         type: Sequelize.ARRAY(Sequelize.STRING),

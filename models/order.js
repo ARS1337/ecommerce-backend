@@ -26,6 +26,16 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
+      orderStatus: {
+        type: DataTypes.ENUM(
+          'Added To Cart',
+          'Ordered',
+          'Shipped',
+          'Delivered'
+        ),
+        allowNull: false,
+        defaultValue: 'Added To Cart',
+      },
       customerId: {
         type: DataTypes.UUID,
         allowNull: false, // Ensures that every Order must belong to a Customer
