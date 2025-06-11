@@ -2,11 +2,31 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { Customer } = require('../../models');
 
+const signUp = async (req, res) => {
+  const { name, userName, password } = req.body;
+  const customer = await Customer.findOne({
+    where: {
+      userName: userName.toLowerCase(),
+    },
+  });
+  if (customer) {
+    return res
+      .status(400)
+      .json({ message: 'user already exists with this username' });
+  }
+  await Customer.create({
+    name,
+    userName: userName.toLowerCase(),
+    password,
+  });
+  return res.status(201).json({ message: 'success' });
+};
+
 const logIn = async (req, res) => {
   const { userName, password } = req.body;
   const customer = await Customer.findOne({
     where: {
-      userName,
+      userName: userName.toLowerCase(),
     },
   });
   if (!customer) {
@@ -70,4 +90,10 @@ const setCustomerDetails = async (req, res) => {
   return res.status(200).json(updatedCustomer);
 };
 
-module.exports = { logIn, logOut, getCustomerDetails, setCustomerDetails };
+module.exports = {
+  logIn,
+  logOut,
+  signUp,
+  getCustomerDetails,
+  setCustomerDetails,
+};

@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Order.belongsToMany(models.Product, {
-        through: 'OrderProducts', // Name of the junction table
+        through: models.OrderProduct, // Name of the junction table
         foreignKey: { name: 'orderId', type: DataTypes.UUID }, // The foreign key in the junction table that points to the Order
         otherKey: { name: 'productId', type: DataTypes.UUID }, // The foreign key in the junction table that points to the Product
       });
@@ -44,6 +44,13 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id', // Reference the 'id' column of Customers
         },
         onDelete: 'CASCADE', // Optional: If the customer is deleted, their orders will be deleted as well
+      },
+      address: {
+        type: DataTypes.STRING(512),
+        allowNull: false,
+      },
+      deliveryInstructions: {
+        type: DataTypes.STRING(512),
       },
     },
     {

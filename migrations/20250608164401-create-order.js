@@ -27,6 +27,13 @@ module.exports = {
         allowNull: false,
         defaultValue: 'Added To Cart',
       },
+      address: {
+        type: Sequelize.STRING(512),
+        allowNull: false,
+      },
+      deliveryInstructions: {
+        type: Sequelize.STRING(512),
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

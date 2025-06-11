@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: { name: 'sellerId', type: DataTypes.UUID },
       });
       Product.belongsToMany(models.Order, {
-        through: 'OrderProducts', // Name of the junction table
+        through: models.OrderProduct, // Name of the junction table
         foreignKey: { name: 'productId', type: DataTypes.UUID }, // The foreign key in the junction table that points to the Product
         otherKey: { name: 'orderId', type: DataTypes.UUID }, // The foreign key in the junction table that points to the Order
       });

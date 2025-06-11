@@ -1,4 +1,4 @@
-const { Product, Category, Seller } = require('../../models');
+const { Product, Category, Seller, Order } = require('../../models');
 const { Op, fn, col, where } = require('sequelize');
 const jwt = require('jsonwebtoken');
 
@@ -24,10 +24,10 @@ const getProducts = async (req, res) => {
 
   whereClause[Op.and] = [
     where(fn('COALESCE', col('discountedPrice'), col('price')), {
-      [Op.gte]: priceGT,
+      [Op.gte]: parseFloat(priceGT),
     }),
     where(fn('COALESCE', col('discountedPrice'), col('price')), {
-      [Op.lte]: priceLT,
+      [Op.lte]: parseFloat(priceLT),
     }),
   ];
 
@@ -52,6 +52,90 @@ const getProducts = async (req, res) => {
   return res.status(200).json({ products });
 };
 
+const searchProducts = async (req, res) => {
+  let {
+    limit = 10,
+    offset = 0,
+    category,
+    tags = [],
+    priceGT = 0,
+    priceLT = 99999999,
+    search,
+  } = req.query;
+
+  category = category ? `%${category}%` : '%';
+
+  search = search ? `%${search}%` : '%';
+
+  const tagsQuery = tags.push(search);
+
+  let whereClause = {};
+
+  let whereClauseNested = {};
+
+  whereClauseNested.name = {
+    [Op.iLike]: category,
+  };
+
+  if (tagsQuery.length > 0) {
+    whereClause.tags = { [Op.overlap]: tagsQuery };
+  }
+
+  whereClause[Op.and] = [
+    where(fn('COALESCE', col('discountedPrice'), col('price')), {
+      [Op.gte]: parseFloat(priceGT),
+    }),
+    where(fn('COALESCE', col('discountedPrice'), col('price')), {
+      [Op.lte]: parseFloat(priceLT),
+    }),
+  ];
+  whereClause[Op.or] = [
+    { name: { [Op.iLike]: search } },
+    { description: { [Op.iLike]: search } },
+  ];
+
+  let products = {};
+  try {
+    products = await Product.findAndCountAll({
+      limit,
+      offset,
+      include: [
+        {
+          model: Category,
+          where: whereClauseNested,
+          required: true,
+          attributes: [],
+        },
+      ],
+      where: whereClause,
+      attributes: ['id', 'name', 'image', 'price', 'discountedPrice', 'rating'],
+      distinct: true,
+    });
+  } catch (error) {
+    console.log(error + 'fdsfsdfsafasdfdsafsadfdsafsadfafadsfa');
+  }
+  //   const products = await Product.findAndCountAll({
+  //     limit,
+  //     offset,
+  //     include: [
+  //       {
+  //         model: Category,
+  //         where: {
+  //           name: {
+  //             [Op.iLike]: category,
+  //           },
+  //         },
+  //         required: true,
+  //         attributes: [],
+  //       },
+  //     ],
+  //     where: whereClause,
+  //     attributes: ['id', 'name', 'image', 'price', 'discountedPrice', 'rating'],
+  //     distinct: true,
+  //   });
+  return res.status(200).json({ count: products.count, data: products.rows });
+};
+
 const getProductById = async (req, res) => {
   const { id } = req.params;
   const product = await Product.findOne({
@@ -73,6 +157,34 @@ const getProductById = async (req, res) => {
     return res.status(404).json({ message: 'product not found for id' });
   }
   return res.status(200).json(product);
+};
+
+const getProductBySeller = async (req, res) => {
+  const token = req.cookies['access_token'];
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+  const { limit = 5, offset = 0 } = req.query;
+  let products;
+  try {
+    products = await Product.findAndCountAll({
+      limit,
+      offset,
+      where: {
+        sellerId: decodedToken.id,
+      },
+      include: [
+        {
+          model: Order,
+          through: {
+            attributes: ['quantity'],
+          },
+        },
+      ],
+      distinct: true,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+  return res.status(200).json({ count: products.count, data: products.rows });
 };
 
 const addProduct = async (req, res) => {
@@ -219,7 +331,9 @@ const deleteProduct = async (req, res) => {
 
 module.exports = {
   getProducts,
+  searchProducts,
   getProductById,
+  getProductBySeller,
   addProduct,
   editProduct,
   deleteProduct,
