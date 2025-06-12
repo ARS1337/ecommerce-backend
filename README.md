@@ -1,4 +1,3 @@
-````markdown
 # 🚀 Project Setup Guide
 
 ## 📦 Installation & Configuration
@@ -8,7 +7,6 @@
 ```bash
 npm install
 ```
-````
 
 ### 2. Environment Setup
 
