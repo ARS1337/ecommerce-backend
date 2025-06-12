@@ -1,33 +1,85 @@
-# Setting up the project
+````markdown
+# 🚀 Project Setup Guide
 
-## run _npm i_ to install all the dependencies
+## 📦 Installation & Configuration
 
-## add the necessary variables in the .env file
+### 1. Install Dependencies
 
-### the JWT_SECRET for signing the jwt ( access_token used in authentication )
+```bash
+npm install
+```
+````
 
-### the PORT on which the server needs to run on
+### 2. Environment Setup
 
-### the FRONTEND_URL needed for cors with credentials
+Create a `.env` file in the root directory and add the following variables:
 
-## update the below fields in config.json in the config folder, used by sequelize for connecting to the database
+```env
+JWT_SECRET=your_jwt_secret_key_here  # For signing JWT access tokens
+PORT=8000                           # Server port (e.g., 8000)
+FRONTEND_URL=http://localhost:3000   # Frontend URL for CORS
+```
 
-### username : (username of your postgres database)
+### 3. Database Configuration
 
-### password : (password of your postgres database)
+Update `config/config.json` with your Postgres credentials:
 
-### database : (postgres for postgres database)
+```json
+{
+  "development": {
+    "username": "your_db_username",
+    "password": "your_db_password",
+    "database": "your_db_name",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+}
+```
 
-### host : (localhost for local or the database server host name)
+## 🛠 Database Operations
 
-### dialect : (postgres for postgres database)
+### 🔄 Migrations
 
-## run _npm run migrate:undo-all_ for undoing any previous migration (no need if migrating the first time)
+| Command                    | Purpose                              |
+| -------------------------- | ------------------------------------ |
+| `npm run migrate:undo-all` | Rollback all migrations _(optional)_ |
+| `npm run migrate`          | Apply all pending migrations         |
 
-## run _npm run migrate_ for applying the migrations
+### 🌱 Seeding
 
-## run _npm run seed:undo-all_ for undoing any previous seeding (no need if seeding the first time)
+| Command                 | Purpose                                                     |
+| ----------------------- | ----------------------------------------------------------- |
+| `npm run seed:undo-all` | Clear all seed data _(optional)_                            |
+| `npm run seed`          | Populate initial data (categories, products, users, seller) |
 
-## run _npm run seed_ for seeding the database with categories, products, user and a seller
+## ▶️ Start the Server
 
-## run _npm run dev_ for starting with nodemon or _npm run start_ for starting with node
+### Development Mode (Hot Reload with nodemon)
+
+```bash
+npm run dev
+```
+
+### Without nodemon
+
+```bash
+npm run start
+```
+
+---
+
+## 🌟 Key Features
+
+- 🔒 JWT Authentication
+- 🌐 CORS Pre-configured
+- 🛒 Pre-loaded Demo Data
+- 📦 Sequelize ORM
+- 🐘 PostgreSQL Ready
+
+---
+
+> **Note**: The `.env` and `config.json` files are sensitive - never commit them to version control!
+
+```
+
+```
