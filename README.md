@@ -5,6 +5,7 @@
 ### 1. Install Dependencies
 
 uses node v22.5.1
+ensure node v22.5.1 is installed
 
 ```bash
 npm install
@@ -21,6 +22,8 @@ FRONTEND_URL=http://localhost:3000   # Frontend URL for CORS
 ```
 
 ### 3. Database Configuration
+
+ensure postgres is installed and the service is running
 
 Update or add if not already added `config/config.json` with your Postgres credentials:
 
