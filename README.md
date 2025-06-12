@@ -22,7 +22,7 @@ FRONTEND_URL=http://localhost:3000   # Frontend URL for CORS
 
 ### 3. Database Configuration
 
-Update `config/config.json` with your Postgres credentials:
+Update or add if not already added `config/config.json` with your Postgres credentials:
 
 ```json
 {
@@ -79,7 +79,3 @@ npm run start
 ---
 
 > **Note**: The `.env` and `config.json` files are sensitive - never commit them to version control!
-
-```
-
-```
