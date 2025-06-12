@@ -7,5 +7,4 @@
 /node_modules
 
 # Sequelize Config
-/config/*
-!/config/config.example.json
+/config/config.json
