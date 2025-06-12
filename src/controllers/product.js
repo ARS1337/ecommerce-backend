@@ -32,8 +32,8 @@ const getProducts = async (req, res) => {
   ];
 
   const products = await Product.findAll({
-    limit,
-    offset,
+    limit: parseInt(limit),
+    offset: parseInt(offset),
     include: [
       {
         model: Category,
@@ -261,16 +261,19 @@ const editProduct = async (req, res) => {
   if (!product) {
     return res.status(404).json({ message: 'product not found for productId' });
   }
-  const category = await Category.findOne({
-    where: {
-      id: categoryId,
-    },
-  });
-  if (!category) {
-    return res
-      .status(404)
-      .json({ message: 'category not found for categoryId' });
+  if (categoryId) {
+    const category = await Category.findOne({
+      where: {
+        id: categoryId,
+      },
+    });
+    if (!category) {
+      return res
+        .status(404)
+        .json({ message: 'category not found for categoryId' });
+    }
   }
+
   if (product.sellerId != decodedToken.id) {
     return res
       .status(403)
@@ -299,6 +302,9 @@ const editProduct = async (req, res) => {
   }
   if (tags) {
     editBody.tags = tags;
+  }
+  if (categoryId) {
+    editBody.categoryId = categoryId;
   }
   const updatedProduct = await product.update(editBody);
   return res.status(200).json(updatedProduct);
