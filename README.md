@@ -4,6 +4,8 @@
 
 ### 1. Install Dependencies
 
+uses node v22.5.1
+
 ```bash
 npm install
 ```
